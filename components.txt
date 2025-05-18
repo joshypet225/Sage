@@ -1,0 +1,167 @@
+============================
+SAGE MCP COMPONENTS OVERVIEW
+============================
+
+This document provides an overview of the structure, functionality, and responsibilities
+of each core component in the Sage decentralized MCP server.
+
+1. - mcp_server.py
+  Entry point of the FastAPI application. It initializes the MCP, registers routes, and binds tools and resources used across Sage.
+
+--------------------------------------
+2. app/
+--------------------------------------
+
+- routes/
+  Contains FastAPI route modules organized by feature domain.
+
+  - mcp.py
+    Defines custom routes related to MCP interactions and testing.
+  
+  - yields.py
+    Handles HTTP endpoints for fetching live and historical yield data from DeFi protocols.
+  
+  - risks.py
+    Exposes routes for analyzing DeFi risks in yield-bearing pools based on factors like APY, TVL, and source reliability.
+
+  - rebalance.py
+    Provides endpoints for rebalancing a user's portfolio based on current holdings and target allocations.
+  
+  - alerts.py
+    Allows alert subscription for token-specific APY or TVL thresholds.
+  
+  - pricing.py
+    Connects to token price and historical data endpoints via services like CoinLib and CoinRanking.
+
+- services/
+  Contains the core logic and service layer functions used by the routes and MCP tools/resources.
+
+  - context_handler.py
+    Analyzes the user's MCP prompt and dynamically returns context-aware yield information based on tracked tokens.
+
+  - defi.py
+    Houses business logic related to risk detection and DeFi yield filtering.
+
+  - yields.py
+    Fetches real-time yield data and top opportunities from the DeFi Llama API.
+
+  - alerts.py
+    Utility for setting and checking alert thresholds tied to specific tokens.
+
+  - rebalance.py
+    Contains logic to suggest portfolio rebalancing strategies using current and target allocations.
+
+  - pricing.py
+    Fetches current and historical token prices using `market_data.py`.
+
+- utils/
+  Common utility functions and services shared across modules.
+
+  - logging.py
+    Initializes and configures centralized logging for both runtime and debugging purposes.
+  
+  - market_data.py
+    A unified interface for fetching token price data from multiple third-party sources like CoinLib and CoinRanking. Helps abstract external API dependencies.
+
+  - cache.py
+    Designed to improve inmemory data fetching
+--------------------------------------
+3. test/
+--------------------------------------
+
+Contains unit and integration test modules to validate the behavior of routes, services, and MCP tooling.
+
+Recommended structure:
+- test_routes/
+- test_services/
+- test_utils/
+
+Testing is essential to ensure API reliability and prevent regressions in smart automation logic.
+
+--------------------------------------
+4. .env / .env.example
+--------------------------------------
+
+Environment variables including:
+- API Keys (DeFi Llama, CoinLib, CoinRanking)
+- Service URLs
+- MCP-specific configuration
+
+Never commit `.env` to version control. Use `.env.example` to define required keys.
+
+--------------------------------------
+5. MCP TOOLS & RESOURCES
+--------------------------------------
+
+The `FastMCP` instance in `main.py` registers:
+
+- Tools
+  Reusable functions for insights like `get_top_yields`, `detect_risks`, `get_token_price`, etc.
+  
+- Resources
+  URI-mapped endpoints (e.g., pricing://token-prices/BTC/history) allowing MCP Inspector to fetch token-specific info without long prompts.
+
+--------------------------------------
+6. SECURITY CONSIDERATIONS
+--------------------------------------
+
+Sage is designed to minimize security and privacy risks:
+- ❌ No user wallet addresses or private keys are stored or accessed
+- ✅ All yield and price data are fetched from public APIs (DeFi Llama, CoinLib, CoinRanking)
+- ✅ Rate limiting and timeouts are in place to avoid abuse or lock-ups
+- ✅ Sensitive keys are loaded via environment variables and never hardcoded
+
+If future versions require wallet interactions, consider using secure client-side signing with no server custody of keys.
+
+--------------------------------------
+7. FUTURE IMPROVEMENTS 
+--------------------------------------
+
+- Redis, Azure CosmosDB or in-memory stores to cache common tokens or yield responses.
+- Enable pagination for historical price data or alerts.
+- Modular memory/embedding support for richer prompt tracking in context handler.
+
+--------------------------------------
+8. APIs Used
+--------------------------------------
+
+Coinlib API
+Sage integrates with the Coinlib API to fetch live token prices.
+
+Endpoint: https://coinlib.io/api/v1/coin?key=YOUR_API_KEY&symbol=SYMBOL
+
+Data Provided:
+
+-Current token price
+-Market capitalization
+-24-hour price change
+-Volume data
+
+--------------------------------------
+Coinranking API
+--------------------------------------
+Sage uses the Coinranking API to retrieve token prices and historical data.
+
+Endpoint: https://api.coinranking.com/v2/coins
+
+Data Provided:
+
+-Current prices for tokens
+-Market data such as market cap, volume, etc.
+-Historical price data for tokens
+
+--------------------------------------
+DeFi Llama API & Beefy Finance
+--------------------------------------
+Sage fetches yield data from DeFi Llama to provide up-to-date information on yield farming pools.
+
+Endpoint: https://yields.llama.fi/pools, https://api.beefy.finance/vaults
+
+Data Provided:
+
+-Token yield data from various DeFi platforms
+-TVL (Total Value Locked) in pools
+-APY (Annual Percentage Yield) data
+
+
+

@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+# Lock file for uv package manager
+uv.lock
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# virtual environment folders
+.venv/
+env/
+
+#Others
+.python-version
+pyproject.toml
+

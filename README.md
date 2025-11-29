@@ -29,7 +29,7 @@ To get started with Sage, follow these steps:
 
 1. Python 3.8+  
 2. Install **uv** as the package manager:
-   ```bash
+   ```bash 
    pip install uv
 
 ## Steps to Install

@@ -106,10 +106,10 @@ The `FastMCP` instance in `main.py` registers:
 --------------------------------------
 
 Sage is designed to minimize security and privacy risks:
-- ❌ No user wallet addresses or private keys are stored or accessed
-- ✅ All yield and price data are fetched from public APIs (DeFi Llama, CoinLib, CoinRanking)
-- ✅ Rate limiting and timeouts are in place to avoid abuse or lock-ups
-- ✅ Sensitive keys are loaded via environment variables and never hardcoded
+-  No user wallet addresses or private keys are stored or accessed
+-  All yield and price data are fetched from public APIs (DeFi Llama, CoinLib, CoinRanking)
+-  Rate limiting and timeouts are in place to avoid abuse or lock-ups
+-  Sensitive keys are loaded via environment variables and never hardcoded
 
 If future versions require wallet interactions, consider using secure client-side signing with no server custody of keys.
 

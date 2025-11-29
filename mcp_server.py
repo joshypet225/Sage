@@ -32,13 +32,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# # Register routers
-# app.include_router(mcp_routes.router)
-# app.include_router(yields.router)
-# app.include_router(risks.router)
-# app.include_router(rebalance.router)
-# app.include_router(alerts.router)
-# app.include_router(pricing.router)
+# Register routers
+ app.include_router(mcp_routes.router)
+ app.include_router(yields.router)
+ app.include_router(risks.router)
+ app.include_router(rebalance.router)
+ app.include_router(alerts.router)
+ app.include_router(pricing.router)
 
 # MCP Tools
 @mcp.tool()

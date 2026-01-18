@@ -47,6 +47,7 @@ To get started with Sage, follow these steps:
    touch .env
 Sample .env file
     ```bash
+    
     COINLIB_API_URL=https://coinlib.io/api/v1/
     COINLIB_API_KEY=your_coinlib_api_key
     COINRANKING_API_URL= https://api.coinranking.com/v2
